@@ -1,0 +1,77 @@
+﻿@model mvc.Models.EmergingTechnologiesFeedback
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Delete</h2>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>EmergingTechnologiesFeedback</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Heading)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Heading)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Rating)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Rating)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Feedback)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Feedback)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Agree)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Agree)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Disagree)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Disagree)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EmergingTechnologiesName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EmergingTechnologiesName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.OwnerID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OwnerID)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="ID" />
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </form>
+    </div>
+</div>

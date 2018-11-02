@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using mvc.Data;
 using mvc.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,15 @@ namespace mvc.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -20,9 +32,10 @@ namespace mvc.Controllers
             return View();
         }
 
-        public IActionResult Technologies()
+        public async Task<IActionResult> Technologies()
         {
-            return View();
+
+            return View(await _context.emergingTechnologiesFeedbacks.ToListAsync());
         }
 
         public IActionResult Organizations()

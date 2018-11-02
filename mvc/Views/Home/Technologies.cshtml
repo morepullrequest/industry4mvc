@@ -1,6 +1,11 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<mvc.Models.EmergingTechnologiesFeedback>
+@{
     ViewData["Title"] = "Technologies";
 }
+
 
 <div class="overview">
     <div class="desc-wrapper text-light">
@@ -38,3 +43,50 @@
 </div>
 
 <div id="tech-grid"></div>
+
+<div class="tech-feadback">
+    <div class="tech-feadback-tips">
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <p>
+                Please <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Home/Technologies")" class="nav-link">log in</a> or <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Page("/Home/Technologies")" class="nav-link">create an account</a>
+            </p>
+        }
+        else
+        {
+            <button type="button" class="btn btn-new-callback"><a href="/EmergingTechnologiesFeedbacks/Create" class="text-white">Submit your feedback</a></button>
+        }
+    </div>
+
+    <div class="feedback-list">
+        @foreach (var item in Model)
+        {
+            <div class="feedback-item">
+                <h3>@Html.DisplayFor(modelItem => item.Heading)</h3>
+                <div>@@@Html.DisplayFor(modelItem => item.EmergingTechnologiesName) </div>
+                <div class="rating-wrapper">
+                    @for (int i = 0; i < item.Rating; i++)
+                    {
+                        <span class="star-on"></span>
+                    }
+                    @for (int i = item.Rating; i < 5; i++)
+                    {
+                        <span class="star-off"></span>
+                    }
+
+                </div>
+                <div class="feedback-content">@item.Feedback</div>
+                <div>
+                    Feedbacked by @Html.DisplayFor(modelItem => item.Username) on @item.ReleaseDate
+                </div>
+                <div>
+                    <button class="btn"><a href="/EmergingTechnologiesFeedbacks/Details/@item.ID" class="text-black-50">Detail</a></button>
+                    <button class="btn btn-success"><a href="/EmergingTechnologiesFeedbacks/Agree/@item.ID" class="text-white">Agree (@item.Agree)</a></button>
+                    <button class="btn btn-danger"><a href="/EmergingTechnologiesFeedbacks/Disagree/@item.ID" class="text-white">Disagree (@item.Disagree)</a></button>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using mvc.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace mvc.Data
 {
@@ -12,5 +13,7 @@ namespace mvc.Data
             : base(options)
         {
         }
+
+        public DbSet<EmergingTechnologiesFeedback> emergingTechnologiesFeedbacks { get; set; }
     }
 }

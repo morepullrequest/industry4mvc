@@ -1,0 +1,75 @@
+﻿@model mvc.Models.EmergingTechnologiesFeedback
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Details</h2>
+
+    <div>
+        <h4>EmergingTechnologiesFeedback</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Heading)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Heading)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Rating)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Rating)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Feedback)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Feedback)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Agree)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Agree)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Disagree)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Disagree)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EmergingTechnologiesName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EmergingTechnologiesName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.OwnerID)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OwnerID)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
