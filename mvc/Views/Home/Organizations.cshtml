@@ -122,7 +122,7 @@
     <div class="feedback-list" id="feedback-list">
         @foreach (var item in Model)
         {
-            <div class="feedback-item">
+            <div class="feedback-item" id="item-@item.ID">
                 <h3>@Html.DisplayFor(modelItem => item.Heading)</h3>
                 <div>@@@Html.DisplayFor(modelItem => item.CompanyName) </div>
                 <div class="rating-wrapper">
