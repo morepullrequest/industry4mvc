@@ -2,6 +2,7 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @model IEnumerable<mvc.Models.EmergingTechnologiesFeedback>
+@using mvc.Data;
 @{
     ViewData["Title"] = "Technologies";
 }
@@ -44,14 +45,14 @@
 
 <div id="tech-grid"></div>
 
-<div class="tech-feadback container">
+<div class="tech-feadback container" id="feedback-wrapper">
     <div class="tech-feadback-tips">
         @if (!SignInManager.IsSignedIn(User))
         {
             <div>
-                Please 
-                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Home/Technologies")">log in</a> 
-                or 
+                Please
+                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Home/Technologies")">log in</a>
+                or
                 <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Page("/Home/Technologies")">create an account</a>
             </div>
         }
@@ -61,7 +62,7 @@
         }
     </div>
 
-    <div class="feedback-list">
+    <div class="feedback-list" id="feedback-list">
         @foreach (var item in Model)
         {
             <div class="feedback-item">
@@ -83,9 +84,22 @@
                     Feedback by  <span class="feedback-user">@Html.DisplayFor(modelItem => item.Username)</span> on <span class="feedback-time">@item.Date</span>
                 </div>
                 <div class="feedback-buttons">
-                    <button class="btn"><a href="/EmergingTechnologiesFeedbacks/Details/@item.ID" class="text-black-50">Detail</a></button>
-                    <button class="btn btn-success"><a href="/EmergingTechnologiesFeedbacks/Agree/@item.ID" class="text-white">Agree (@item.Agree)</a></button>
-                    <button class="btn btn-danger"><a href="/EmergingTechnologiesFeedbacks/Disagree/@item.ID" class="text-white">Disagree (@item.Disagree)</a></button>
+                    <div>
+
+
+                        <button class="btn"><a href="/EmergingTechnologiesFeedbacks/Details/@item.ID" class="text-black-50">Detail</a></button>
+                        <button class="btn btn-success"><a href="/EmergingTechnologiesFeedbacks/Agree/@item.ID" class="text-white">Agree (@item.Agree)</a></button>
+                        <button class="btn btn-danger"><a href="/EmergingTechnologiesFeedbacks/Disagree/@item.ID" class="text-white">Disagree (@item.Disagree)</a></button>
+                    </div>
+                    @if (UserManager.GetUserName(User).Equals("manager@example.com"))
+                    {
+
+                        <div>
+                            <button class="btn manager-btn"><a href="/EmergingTechnologiesFeedbacks/Edit/@item.ID" class="text-black-50">Edit</a></button>
+                            <button class="btn manager-btn"><a href="/EmergingTechnologiesFeedbacks/Delete/@item.ID" class="text-black-50">Delete</a></button>
+                        </div>
+                    }
+
                 </div>
             </div>
         }

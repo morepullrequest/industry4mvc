@@ -30,7 +30,7 @@ namespace mvc
                 // Set password with the Secret Manager tool.
                 // dotnet user-secrets set SeedUserPW <pw>
 
-                var testUserPw = "admin2018!";
+                var testUserPw = "Admin2018!";
                 try
                 {
                     SeedData.Initialize(services, testUserPw).Wait();

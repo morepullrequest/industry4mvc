@@ -63,16 +63,27 @@ namespace mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
         {
+            emergingTechnologiesFeedback.Date = DateTime.Now;
+            emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
+            emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
+
             if (ModelState.IsValid)
             {
                 emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
                 emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
+                if (!UserManager.GetUserName(User).Equals("manager@example.com"))
+                {
+                    emergingTechnologiesFeedback.Agree = 0;
+                    emergingTechnologiesFeedback.Disagree = 0;
+                }
+
                 Context.Add(emergingTechnologiesFeedback);
                 await Context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Home/Technologies#feedback-wrapper");
             }
+
             return View(emergingTechnologiesFeedback);
         }
 
@@ -85,9 +96,8 @@ namespace mvc.Controllers
                 return NotFound();
             }
 
-            var isAuth = await AuthorizationService.AuthorizeAsync(User, id, FeedbackOperations.Update);
-
-            if (!isAuth.Succeeded)
+            if (!UserManager.GetUserName(User).Equals("manager@example.com"))
+            //if (User.IsInRole(Constants.ManagersRole))
             {
                 return new ChallengeResult();
             }
@@ -95,11 +105,11 @@ namespace mvc.Controllers
             var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
 
 
-
             if (emergingTechnologiesFeedback == null)
             {
                 return NotFound();
             }
+            emergingTechnologiesFeedback.Date = DateTime.Now;
             return View(emergingTechnologiesFeedback);
         }
 
@@ -108,11 +118,10 @@ namespace mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
         {
-            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Update);
-
-            if (!isAuth.Succeeded)
+            if (!UserManager.GetUserName(User).Equals("manager@example.com"))
+            //if (User.IsInRole(Constants.ManagersRole))
             {
                 return new ChallengeResult();
             }
@@ -126,7 +135,15 @@ namespace mvc.Controllers
             {
                 try
                 {
-                    Context.Update(emergingTechnologiesFeedback);
+                    var oriFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
+                    oriFeedback.Date = DateTime.Now;
+                    oriFeedback.Heading = emergingTechnologiesFeedback.Heading;
+                    oriFeedback.Rating = emergingTechnologiesFeedback.Rating;
+                    oriFeedback.Agree = emergingTechnologiesFeedback.Agree;
+                    oriFeedback.Disagree = emergingTechnologiesFeedback.Disagree;
+                    oriFeedback.EmergingTechnologiesName = emergingTechnologiesFeedback.EmergingTechnologiesName;
+
+                    Context.Update(oriFeedback);
                     await Context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -140,7 +157,7 @@ namespace mvc.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Home/Technologies");
             }
             return View(emergingTechnologiesFeedback);
         }
@@ -148,23 +165,19 @@ namespace mvc.Controllers
         // GET: EmergingTechnologiesFeedbacks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!UserManager.GetUserName(User).Equals("manager@example.com"))
+            //if (User.IsInRole(Constants.ManagersRole))
+            {
+                return new ChallengeResult();
+            }
 
             if (id == null)
             {
                 return NotFound();
             }
 
-
-
             var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks
                 .FirstOrDefaultAsync(m => m.ID == id);
-
-            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Delete);
-
-            if (!isAuth.Succeeded)
-            {
-                return new ChallengeResult();
-            }
 
             if (emergingTechnologiesFeedback == null)
             {
@@ -179,15 +192,13 @@ namespace mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-
-            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
-
-            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Delete);
-
-            if (!isAuth.Succeeded)
+            if (!UserManager.GetUserName(User).Equals("manager@example.com"))
+            //if (User.IsInRole(Constants.ManagersRole))
             {
                 return new ChallengeResult();
             }
+
+            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
 
             Context.emergingTechnologiesFeedbacks.Remove(emergingTechnologiesFeedback);
             await Context.SaveChangesAsync();

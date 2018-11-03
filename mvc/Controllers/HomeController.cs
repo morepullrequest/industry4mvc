@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace mvc.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : BaseController
     {
         public HomeController(

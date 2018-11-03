@@ -18,12 +18,12 @@ namespace mvc.Data
                 // same password 
 
                 // admin can do anything
-                var adminID = await EnsureUser(serviceProvider, testUserPw, "admin@example.com");
-                await EnsureRole(serviceProvider, adminID, Constants.ContactAdministratorsRole);
+                //var adminID = await EnsureUser(serviceProvider, testUserPw, "admin@example.com");
+                //await EnsureRole(serviceProvider, adminID, Constants.AdministratorsRole);
 
                 // manager can edit or delete feedback
                 var managerID = await EnsureUser(serviceProvider, testUserPw, "manager@example.com");
-                await EnsureRole(serviceProvider, managerID, Constants.ContactManagersRole);
+                await EnsureRole(serviceProvider, managerID, Constants.ManagersRole);
 
                 // common user
                 string username = "user@example.com";
@@ -43,7 +43,7 @@ namespace mvc.Data
             if (user == null)
             {
                 user = new IdentityUser { UserName = UserName };
-                await userManager.CreateAsync(user, testUserPw);
+                userManager.CreateAsync(user, testUserPw).Wait();
             }
             return user.Id;
         }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +44,15 @@ namespace mvc
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(
+                config =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                }
+                ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IAuthorizationHandler, FeedbackAdminAuthHandler>();
             services.AddScoped<IAuthorizationHandler, FeedbackManagerAuthHandler>();

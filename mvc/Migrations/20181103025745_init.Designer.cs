@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mvc.Data;
 
-namespace mvc.Data.Migrations
+namespace mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181102053516_feedbk")]
-    partial class feedbk
+    [Migration("20181103025745_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -194,19 +194,22 @@ namespace mvc.Data.Migrations
 
                     b.Property<int>("Agree");
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<int>("Disagree");
 
-                    b.Property<string>("EmergingTechnologiesName");
+                    b.Property<string>("EmergingTechnologiesName")
+                        .IsRequired();
 
-                    b.Property<string>("Feedback");
+                    b.Property<string>("Feedback")
+                        .IsRequired();
 
-                    b.Property<string>("Heading");
+                    b.Property<string>("Heading")
+                        .IsRequired();
 
                     b.Property<string>("OwnerID");
 
                     b.Property<int>("Rating");
-
-                    b.Property<DateTime>("Date");
 
                     b.Property<string>("Username");
 

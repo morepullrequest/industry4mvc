@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using mvc.Data;
 
-namespace mvc.Data.Migrations
+namespace mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181103004034_date_name_1")]
-    partial class date_name_1
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,11 +196,14 @@ namespace mvc.Data.Migrations
 
                     b.Property<int>("Disagree");
 
-                    b.Property<string>("EmergingTechnologiesName");
+                    b.Property<string>("EmergingTechnologiesName")
+                        .IsRequired();
 
-                    b.Property<string>("Feedback");
+                    b.Property<string>("Feedback")
+                        .IsRequired();
 
-                    b.Property<string>("Heading");
+                    b.Property<string>("Heading")
+                        .IsRequired();
 
                     b.Property<string>("OwnerID");
 

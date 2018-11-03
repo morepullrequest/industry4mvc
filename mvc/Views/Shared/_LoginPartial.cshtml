@@ -3,9 +3,11 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+
+
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Home/Index")" method="post" id="logoutForm">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link" title="Manage">Hello @UserManager.GetUserName(User)!</a>

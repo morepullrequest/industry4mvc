@@ -346,8 +346,7 @@ footer {
     margin-bottom: 10px;
     background-color: rgba(230, 230, 230,0.3);
     padding: 40px 20px 40px 20px;
-
-    border-radius:10px 10px 0 0;
+    border-radius: 10px 10px 0 0;
     border-bottom: 2px solid rgb(249, 201, 53);
 }
 
@@ -374,8 +373,51 @@ footer {
 
 .feedback-buttons {
     margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
 }
+
 
     .feedback-buttons .btn {
         margin-right: 10px;
+        margin-bottom: 10px;
     }
+
+.editor-wrapper {
+    margin-bottom: 10px;
+}
+
+.feedback-detail-wrapper dl {
+    width: 100%;
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.feedback-detail-wrapper dt {
+    display: inline-block;
+    width: 30%;
+    text-align: right;
+    vertical-align: top;
+    word-break: break-word;
+}
+
+.feedback-detail-wrapper dd {
+    display: inline-block;
+    flex: 1;
+    margin: 0;
+    margin-left: 30px;
+    vertical-align: top;
+}
+
+.detail-container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.feedback-detail-wrapper .feedback-detail {
+    margin-top: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgb(248, 186, 0);
+    border-top: 1px solid rgb(248, 186, 0);
+}

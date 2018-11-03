@@ -1,4 +1,5 @@
-﻿using System;
+﻿using mvc.Models.Util;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,16 +17,23 @@ namespace mvc.Models
 
         public String Username { get; set; }
 
+        [Required]
         public String Heading { get; set; }
 
         [Range(0, 5)]
         public int Rating { get; set; }
 
+        [Required]
+        [MinLength(5)]
         public string Feedback { get; set; }
 
         public int Agree { get; set; } = 0;
 
         public int Disagree { get; set; } = 0;
+
+        [Required]
+        [TechType]
+        [Display(Name = "Emerging Technologiey")]
 
         public String EmergingTechnologiesName { get; set; }
 
@@ -35,22 +43,4 @@ namespace mvc.Models
 
 
 
-    public enum EmergingTechnologies
-    {
-        AI,
-        IoT,
-        CognitiveServices,
-        CloudComputing,
-        Robotics,
-        Blockchains
-    }
-
-    public class EnumET
-    {
-        public static Array GetEnumET()
-        {
-            return Enum.GetValues(typeof(EmergingTechnologies));
-        }
-
-    }
 }

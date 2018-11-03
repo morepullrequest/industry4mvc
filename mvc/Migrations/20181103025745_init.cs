@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace mvc.Data.Migrations
+namespace mvc.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,6 +45,27 @@ namespace mvc.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "emergingTechnologiesFeedbacks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
+                    Heading = table.Column<string>(nullable: false),
+                    Rating = table.Column<int>(nullable: false),
+                    Feedback = table.Column<string>(nullable: false),
+                    Agree = table.Column<int>(nullable: false),
+                    Disagree = table.Column<int>(nullable: false),
+                    EmergingTechnologiesName = table.Column<string>(nullable: false),
+                    OwnerID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_emergingTechnologiesFeedbacks", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +230,9 @@ namespace mvc.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "emergingTechnologiesFeedbacks");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
