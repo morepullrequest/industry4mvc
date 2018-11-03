@@ -23,7 +23,7 @@ namespace mvc.Controllers
             IAuthorizationService authorizationService,
             UserManager<IdentityUser> userManager,
               SignInManager<IdentityUser> signInManager)
-            : base(context, authorizationService, userManager, signInManager)
+            : base(context, authorizationService, userManager,signInManager)
         {
 
         }
@@ -68,24 +68,23 @@ namespace mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,CompanyName,OwnerID")] CompanyAndOrganizationFeedback feedback)
+        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,CompanyName,OwnerID")] CompanyAndOrganizationFeedback companyAndOrganizationFeedback)
         {
-
             if (ModelState.IsValid)
             {
-                feedback.Date = DateTime.Now;
-                feedback.Username = UserManager.GetUserName(User);
-                feedback.OwnerID = UserManager.GetUserId(User);
+                companyAndOrganizationFeedback.Date = DateTime.Now;
+                companyAndOrganizationFeedback.Username = UserManager.GetUserName(User);
+                companyAndOrganizationFeedback.OwnerID = UserManager.GetUserId(User);
                 if (!UserManager.GetUserName(User).Equals("manager@example.com"))
                 {
-                    feedback.Agree = 0;
-                    feedback.Disagree = 0;
+                    companyAndOrganizationFeedback.Agree = 0;
+                    companyAndOrganizationFeedback.Disagree = 0;
                 }
-                Context.Add(feedback);
+                Context.Add(companyAndOrganizationFeedback);
                 await Context.SaveChangesAsync();
                 return Redirect("/Home/Organizations#feedback-wrapper");
             }
-            return View(feedback);
+            return View(companyAndOrganizationFeedback);
         }
 
         // GET: CompanyFeedbacks/Edit/5

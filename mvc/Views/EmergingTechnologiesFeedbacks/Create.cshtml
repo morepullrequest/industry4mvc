@@ -11,7 +11,7 @@
     <h4>EmergingTechnologiesFeedback</h4>
     <hr />
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Heading" class="control-label"></label>
-                    <input asp-for="Heading" class="form-control" placeholder="Enter a topic for your feedback"/>
+                    <input asp-for="Heading" class="form-control" placeholder="Enter a topic for your feedback" />
                     <span asp-validation-for="Heading" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -60,22 +60,6 @@
                     <textarea asp-for="Feedback" class="form-control" rows="5"></textarea>
                     <span asp-validation-for="Feedback" class="text-danger"></span>
                 </div>
-                @*<div class="form-group">
-                    <label asp-for="Agree" class="control-label"></label>
-                    <input asp-for="Agree" class="form-control" />
-                    <span asp-validation-for="Agree" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Disagree" class="control-label"></label>
-                    <input asp-for="Disagree" class="form-control" />
-                    <span asp-validation-for="Disagree" class="text-danger"></span>
-                </div>*@
-
-                @*<div class="form-group">
-            <label asp-for="OwnerID" class="control-label"></label>
-            <input asp-for="OwnerID" class="form-control"  disabled/>
-            <span asp-validation-for="OwnerID" class="text-danger"></span>
-        </div>*@
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-default" />
                 </div>
@@ -84,7 +68,7 @@
     </div>
 
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a href="/Home/Technologies">Back to Emerging Technologies</a>
     </div>
 
     @section Scripts {

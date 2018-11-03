@@ -30,9 +30,6 @@ namespace mvc.Models
 
         public int Disagree { get; set; } = 0;
 
-        [Required]
-        [CompanyType]
-        [Display(Name = "Name of Companies And Organizations")]
         public String CompanyName { get; set; }
 
         public string OwnerID { get; set; }

@@ -34,7 +34,6 @@ namespace mvc.Models
         [Required]
         [TechType]
         [Display(Name = "Emerging Technologiey")]
-
         public String EmergingTechnologiesName { get; set; }
 
         public string OwnerID { get; set; }
