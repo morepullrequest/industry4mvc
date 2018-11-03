@@ -39,21 +39,6 @@ namespace mvc.Controllers
 
         public async Task<IActionResult> Technologies()
         {
-            string cookie = HttpContext.Request.Cookies[".AspNetCore.Identity.Application"];
-            String hash = "";
-            if (!String.IsNullOrEmpty(cookie))
-            {
-                MD5 md5 = MD5.Create();
-                byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(cookie));
-                StringBuilder res = new StringBuilder();
-                for(int i = 0; i < data.Length; i++)
-                {
-                    res.Append(data[i].ToString("x2"));
-                }
-                 hash= res.ToString();
-            }
-
-            ViewData["cookie"] = hash;
 
             IQueryable<EmergingTechnologiesFeedback> feedbacks = from f in Context.emergingTechnologiesFeedbacks
                                                                  select f;

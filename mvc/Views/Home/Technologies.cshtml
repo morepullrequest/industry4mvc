@@ -12,7 +12,7 @@
     <div class="desc-wrapper text-light">
         <h1>Industry 4.0</h1>
         <h2>Emerging Technologies</h2>
-        @ViewData["cookie"]
+        @ViewData["Cookie"]
     </div>
 </div>
 <div class="introductions">
@@ -66,7 +66,7 @@
     <div class="feedback-list" id="feedback-list">
         @foreach (var item in Model)
         {
-            <div class="feedback-item">
+            <div class="feedback-item" id="item-@item.ID">
                 <h3>@Html.DisplayFor(modelItem => item.Heading)</h3>
                 <div>@@@Html.DisplayFor(modelItem => item.EmergingTechnologiesName) </div>
                 <div class="rating-wrapper">

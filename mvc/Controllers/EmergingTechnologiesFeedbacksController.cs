@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
 using mvc.Models;
+using mvc.Models.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -19,8 +22,9 @@ namespace mvc.Controllers
         public EmergingTechnologiesFeedbacksController(
             ApplicationDbContext context,
             IAuthorizationService authorizationService,
-            UserManager<IdentityUser> userManager)
-            : base(context, authorizationService, userManager)
+            UserManager<IdentityUser> userManager,
+             SignInManager<IdentityUser> signInManager)
+            : base(context, authorizationService, userManager, signInManager)
         {
 
         }
@@ -198,6 +202,125 @@ namespace mvc.Controllers
             await Context.SaveChangesAsync();
             return Redirect("/Home/Technologies#feedback-wrapper");
         }
+
+
+        public async Task<IActionResult> Agree(int id)
+        {
+            if (!SignInManager.IsSignedIn(User))
+            {
+                return new ChallengeResult();
+            }
+            if (!EmergingTechnologiesFeedbackExists(id))
+            {
+                return NotFound();
+            }
+
+            string cookie = HttpContext.Request.Cookies[".AspNetCore.Identity.Application"];
+            String hash = "";
+            if (!String.IsNullOrEmpty(cookie))
+            {
+                MD5 md5 = MD5.Create();
+                byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(cookie));
+                StringBuilder res = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    res.Append(data[i].ToString("x2"));
+                }
+                hash = res.ToString();
+
+                // if had agree
+                bool hasAgree = Context.agrees.Any(i => (i.TechFeedbackId == id && i.AgreeOrDisagree == DataConstants.Agree && i.FeedbackType == DataConstants.Tech && i.Cookie == hash));
+
+
+                if (hasAgree)
+                {
+                    return Redirect("/Home/Technologies#item-" + id);
+                }
+
+                // not yet
+                Agree agree = new Agree
+                {
+                    TechFeedbackId = id,
+                    AgreeOrDisagree = DataConstants.Agree,
+                    FeedbackType = DataConstants.Tech,
+                    Cookie = hash
+                };
+                Context.agrees.Add(agree);
+
+                var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FirstOrDefaultAsync(m => m.ID == id);
+                emergingTechnologiesFeedback.Agree++;
+                Context.Update(emergingTechnologiesFeedback);
+
+                await Context.SaveChangesAsync();
+
+                return Redirect("/Home/Technologies#item-" + id);
+
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
+        }
+
+        public async Task<IActionResult> Disagree(int id)
+        {
+            if (!SignInManager.IsSignedIn(User))
+            {
+                return new ChallengeResult();
+            }
+            if (!EmergingTechnologiesFeedbackExists(id))
+            {
+                return NotFound();
+            }
+
+            string cookie = HttpContext.Request.Cookies[".AspNetCore.Identity.Application"];
+            String hash = "";
+            if (!String.IsNullOrEmpty(cookie))
+            {
+                MD5 md5 = MD5.Create();
+                byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(cookie));
+                StringBuilder res = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    res.Append(data[i].ToString("x2"));
+                }
+                hash = res.ToString();
+
+                // if had disagree
+                bool hasDisagree = Context.agrees.Any(i => (i.TechFeedbackId == id && i.AgreeOrDisagree == DataConstants.Disagree && i.FeedbackType == DataConstants.Tech && i.Cookie == hash));
+
+
+                if (hasDisagree)
+                {
+                    return Redirect("/Home/Technologies#item-" + id);
+                }
+
+                // not yet
+                Agree disagree = new Agree
+                {
+                    TechFeedbackId = id,
+                    AgreeOrDisagree = DataConstants.Disagree,
+                    FeedbackType = DataConstants.Tech,
+                    Cookie = hash
+                };
+                Context.agrees.Add(disagree);
+
+                var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FirstOrDefaultAsync(m => m.ID == id);
+                emergingTechnologiesFeedback.Disagree++;
+                Context.Update(emergingTechnologiesFeedback);
+
+                await Context.SaveChangesAsync();
+
+                return Redirect("/Home/Technologies#item-" + id);
+
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
+        }
+
+
 
         private bool EmergingTechnologiesFeedbackExists(int id)
         {

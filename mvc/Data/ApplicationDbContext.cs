@@ -16,5 +16,6 @@ namespace mvc.Data
 
         public DbSet<EmergingTechnologiesFeedback> emergingTechnologiesFeedbacks { get; set; }
         public DbSet<CompanyAndOrganizationFeedback> companyFeedbacks { get; set; }
+        public DbSet<Agree> agrees { get; set; }
     }
 }
