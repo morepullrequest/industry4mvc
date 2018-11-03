@@ -25,11 +25,6 @@ namespace mvc.Controllers
 
         }
 
-        // GET: EmergingTechnologiesFeedbacks
-        public async Task<IActionResult> Index()
-        {
-            return View(await Context.emergingTechnologiesFeedbacks.ToListAsync());
-        }
 
         // GET: EmergingTechnologiesFeedbacks/Details/5
         public async Task<IActionResult> Details(int? id)

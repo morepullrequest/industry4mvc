@@ -19,7 +19,7 @@ namespace mvc.Models.Util
                 return new ValidationResult("Emerging technology name can't be empty.");
             }
 
-            if (!TechType.Types.Contains(feedback.EmergingTechnologiesName))
+            if (!DataConstants.TechTypes.Contains(feedback.EmergingTechnologiesName))
             {
                 return new ValidationResult(GetErrorMessage());
             }
@@ -29,7 +29,7 @@ namespace mvc.Models.Util
 
         protected string GetErrorMessage()
         {
-            return "Emerging technology name must be " + String.Join(",", TechType.Types);
+            return "Emerging technology name must be " + String.Join(",", DataConstants.TechTypes);
         }
     }
 }

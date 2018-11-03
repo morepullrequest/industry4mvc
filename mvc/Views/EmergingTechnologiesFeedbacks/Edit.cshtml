@@ -34,7 +34,7 @@
                     <label asp-for="EmergingTechnologiesName" class="control-label"></label>
                     <select asp-for="EmergingTechnologiesName" class="form-control">
 
-                        @foreach (string i in TechType.Types)
+                        @foreach (string i in DataConstants.TechTypes)
                         {
                             if (i.Equals(Model.EmergingTechnologiesName))
                             {
