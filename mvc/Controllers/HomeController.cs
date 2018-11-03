@@ -42,9 +42,11 @@ namespace mvc.Controllers
             return View(await feedbacks.OrderByDescending(f => f.Date).ToListAsync());
         }
 
-        public IActionResult Organizations()
+        public async Task<IActionResult> Organizations()
         {
-            return View();
+            IQueryable<CompanyAndOrganizationFeedback> feedbacks = from f in Context.companyFeedbacks
+                                                                   select f;
+            return View(await feedbacks.OrderByDescending(f => f.Date).ToListAsync());
         }
 
         public IActionResult Worldmap()

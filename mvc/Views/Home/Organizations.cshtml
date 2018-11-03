@@ -1,6 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<mvc.Models.CompanyAndOrganizationFeedback>
 @{
     ViewData["Title"] = "Companies & Organisations";
 }
@@ -98,4 +99,68 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="tech-feadback container" id="feedback-wrapper">
+    <div class="tech-feadback-tips">
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <div>
+                Please
+                <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Page("/Home/Organizations")">log in</a>
+                or
+                <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Page("/Home/Organizations")">create an account</a>
+            </div>
+        }
+        else
+        {
+            <button type="button" class="btn btn-new-callback"><a href="/CompanyFeedbacks/Create" class="text-white">Submit your feedback</a></button>
+        }
+    </div>
+
+    <div class="feedback-list" id="feedback-list">
+        @foreach (var item in Model)
+        {
+            <div class="feedback-item">
+                <h3>@Html.DisplayFor(modelItem => item.Heading)</h3>
+                <div>@@@Html.DisplayFor(modelItem => item.CompanyName) </div>
+                <div class="rating-wrapper">
+                    @for (int i = 0; i < item.Rating; i++)
+                    {
+                        <span class="star-on"></span>
+                    }
+                    @for (int i = item.Rating; i < 5; i++)
+                    {
+                        <span class="star-off"></span>
+                    }
+
+                </div>
+                <div class="feedback-content">@item.Feedback</div>
+                <div class="feedback-info">
+                    Feedback by  <span class="feedback-user">@Html.DisplayFor(modelItem => item.Username)</span> on <span class="feedback-time">@item.Date</span>
+                </div>
+                <div class="feedback-buttons">
+                    <div>
+
+
+                        <button class="btn"><a href="/CompanyFeedbacks/Details/@item.ID" class="text-black-50">Detail</a></button>
+                        <button class="btn btn-success"><a href="/CompanyFeedbacks/Agree/@item.ID" class="text-white">Agree (@item.Agree)</a></button>
+                        <button class="btn btn-danger"><a href="/CompanyFeedbacks/Disagree/@item.ID" class="text-white">Disagree (@item.Disagree)</a></button>
+                    </div>
+                    @if (SignInManager.IsSignedIn(User) && UserManager.GetUserName(User).Equals("manager@example.com"))
+                    {
+
+                        <div>
+                            <button class="btn manager-btn"><a href="/CompanyFeedbacks/Edit/@item.ID" class="text-black-50">Edit</a></button>
+                            <button class="btn manager-btn"><a href="/CompanyFeedbacks/Delete/@item.ID" class="text-black-50">Delete</a></button>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+
+    </div>
+
 </div>

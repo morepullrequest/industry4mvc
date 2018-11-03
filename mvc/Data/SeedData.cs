@@ -75,39 +75,66 @@ namespace mvc.Data
             return IR;
         }
 
-        public static void SeedDB(ApplicationDbContext context, string userId, string username )
+        public static void SeedDB(ApplicationDbContext context, string userId, string username)
         {
-            if (context.emergingTechnologiesFeedbacks.Any())
+            if (!context.emergingTechnologiesFeedbacks.Any())
             {
-                return;   // DB has been seeded
+                context.emergingTechnologiesFeedbacks.AddRange(
+                   new EmergingTechnologiesFeedback
+                   {
+                       Username = username,
+                       EmergingTechnologiesName = "Internet of Things",
+                       Heading = "What companies are working on IoT",
+                       Rating = 4,
+                       Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
+                       Agree = 2,
+                       Disagree = 0,
+                       OwnerID = userId
+                   },
+                   new EmergingTechnologiesFeedback
+                   {
+                       Username = username,
+                       Heading = "4 AI startups that analyze customer reviews",
+                       EmergingTechnologiesName = "Artificial Intelligence",
+                       Rating = 3,
+                       Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
+                       Agree = 4,
+                       Disagree = 2,
+                       OwnerID = userId
+                   }
+                  );
+                context.SaveChanges();
+            }
+            if (!context.companyFeedbacks.Any())
+            {
+                context.companyFeedbacks.AddRange(
+                   new CompanyAndOrganizationFeedback
+                   {
+                       Username = username,
+                       CompanyName = "Google",
+                       Heading = "What companies are working on IoT",
+                       Rating = 4,
+                       Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
+                       Agree = 2,
+                       Disagree = 0,
+                       OwnerID = userId
+                   },
+                   new CompanyAndOrganizationFeedback
+                   {
+                       Username = username,
+                       Heading = "4 AI startups that analyze customer reviews",
+                       CompanyName = "Google",
+                       Rating = 3,
+                       Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
+                       Agree = 4,
+                       Disagree = 2,
+                       OwnerID = userId
+                   }
+                  );
+                context.SaveChanges();
             }
 
-            context.emergingTechnologiesFeedbacks.AddRange(
-                new EmergingTechnologiesFeedback
-                {
-                    Username = username,
-                    EmergingTechnologiesName = "Internet of Things",
-                    Heading = "What companies are working on IoT",
-                    Rating = 4,
-                    Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
-                    Agree = 2,
-                    Disagree = 0,
-                    OwnerID = userId
-                },
-                new EmergingTechnologiesFeedback
-                {
-                    Username = username,
-                    Heading = "4 AI startups that analyze customer reviews",
-                    EmergingTechnologiesName = "Artificial Intelligence",
-                    Rating = 3,
-                    Feedback = "I know IBM, Apple, Microsoft, Google and Amazon. Are there any other companies?",
-                    Agree = 4,
-                    Disagree = 2,
-                    OwnerID = userId
-                }
-               );
 
-            context.SaveChanges();
         }
     }
 }

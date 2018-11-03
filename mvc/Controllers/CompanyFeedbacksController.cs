@@ -10,13 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace mvc.Controllers
 {
     [Authorize]
-    public class EmergingTechnologiesFeedbacksController : BaseController
+    public class CompanyFeedbacksController : BaseController
     {
-        public EmergingTechnologiesFeedbacksController(
+        public CompanyFeedbacksController(
             ApplicationDbContext context,
             IAuthorizationService authorizationService,
             UserManager<IdentityUser> userManager)
@@ -25,8 +24,14 @@ namespace mvc.Controllers
 
         }
 
+        // GET: CompanyFeedbacks
+        [AllowAnonymous]
+        public async Task<IActionResult> Index()
+        {
+            return View(await Context.companyFeedbacks.ToListAsync());
+        }
 
-        // GET: EmergingTechnologiesFeedbacks/Details/5
+        // GET: CompanyFeedbacks/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
@@ -35,84 +40,76 @@ namespace mvc.Controllers
                 return NotFound();
             }
 
-            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks
+            var companyAndOrganizationFeedback = await Context.companyFeedbacks
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (emergingTechnologiesFeedback == null)
+            if (companyAndOrganizationFeedback == null)
             {
                 return NotFound();
             }
 
-            return View(emergingTechnologiesFeedback);
+            return View(companyAndOrganizationFeedback);
         }
 
-        // GET: EmergingTechnologiesFeedbacks/Create
+        // GET: CompanyFeedbacks/Create
         public IActionResult Create()
         {
-            EmergingTechnologiesFeedback emergingTechnologiesFeedback = new EmergingTechnologiesFeedback();
-            emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
-            emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
-            return View(emergingTechnologiesFeedback);
+            CompanyAndOrganizationFeedback feedback = new CompanyAndOrganizationFeedback();
+            feedback.Username = UserManager.GetUserName(User);
+            feedback.OwnerID = UserManager.GetUserId(User);
+            return View(feedback);
         }
 
-        // POST: EmergingTechnologiesFeedbacks/Create
+        // POST: CompanyFeedbacks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,CompanyName,OwnerID")] CompanyAndOrganizationFeedback feedback)
         {
 
             if (ModelState.IsValid)
             {
-                emergingTechnologiesFeedback.Date = DateTime.Now;
-                emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
-                emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
+                feedback.Date = DateTime.Now;
+                feedback.Username = UserManager.GetUserName(User);
+                feedback.OwnerID = UserManager.GetUserId(User);
                 if (!UserManager.GetUserName(User).Equals("manager@example.com"))
                 {
-                    emergingTechnologiesFeedback.Agree = 0;
-                    emergingTechnologiesFeedback.Disagree = 0;
+                    feedback.Agree = 0;
+                    feedback.Disagree = 0;
                 }
-
-                Context.Add(emergingTechnologiesFeedback);
+                Context.Add(feedback);
                 await Context.SaveChangesAsync();
-                return Redirect("/Home/Technologies#feedback-wrapper");
+                return Redirect("/Home/Organizations#feedback-wrapper");
             }
-
-            return View(emergingTechnologiesFeedback);
+            return View(feedback);
         }
 
-        // GET: EmergingTechnologiesFeedbacks/Edit/5
+        // GET: CompanyFeedbacks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-
             if (id == null)
             {
                 return NotFound();
             }
-
             if (!UserManager.GetUserName(User).Equals("manager@example.com"))
-            //if (User.IsInRole(Constants.ManagersRole))
             {
                 return new ChallengeResult();
             }
-
-            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
-
-
-            if (emergingTechnologiesFeedback == null)
+            var companyAndOrganizationFeedback = await Context.companyFeedbacks.FindAsync(id);
+            if (companyAndOrganizationFeedback == null)
             {
                 return NotFound();
             }
-            emergingTechnologiesFeedback.Date = DateTime.Now;
-            return View(emergingTechnologiesFeedback);
+            companyAndOrganizationFeedback.Date = DateTime.Now;
+            return View(companyAndOrganizationFeedback);
         }
 
-        // POST: EmergingTechnologiesFeedbacks/Edit/5
+        // POST: CompanyFeedbacks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,CompanyName,OwnerID")] CompanyAndOrganizationFeedback companyAndOrganizationFeedback)
         {
             if (!UserManager.GetUserName(User).Equals("manager@example.com"))
             //if (User.IsInRole(Constants.ManagersRole))
@@ -120,7 +117,7 @@ namespace mvc.Controllers
                 return new ChallengeResult();
             }
 
-            if (id != emergingTechnologiesFeedback.ID)
+            if (id != companyAndOrganizationFeedback.ID)
             {
                 return NotFound();
             }
@@ -129,20 +126,20 @@ namespace mvc.Controllers
             {
                 try
                 {
-                    var oriFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
+                    var oriFeedback = await Context.companyFeedbacks.FindAsync(id);
                     oriFeedback.Date = DateTime.Now;
-                    oriFeedback.Heading = emergingTechnologiesFeedback.Heading;
-                    oriFeedback.Rating = emergingTechnologiesFeedback.Rating;
-                    oriFeedback.Agree = emergingTechnologiesFeedback.Agree;
-                    oriFeedback.Disagree = emergingTechnologiesFeedback.Disagree;
-                    oriFeedback.EmergingTechnologiesName = emergingTechnologiesFeedback.EmergingTechnologiesName;
+                    oriFeedback.Heading = companyAndOrganizationFeedback.Heading;
+                    oriFeedback.Rating = companyAndOrganizationFeedback.Rating;
+                    oriFeedback.Agree = companyAndOrganizationFeedback.Agree;
+                    oriFeedback.Disagree = companyAndOrganizationFeedback.Disagree;
+                    oriFeedback.CompanyName = companyAndOrganizationFeedback.CompanyName;
 
                     Context.Update(oriFeedback);
                     await Context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmergingTechnologiesFeedbackExists(emergingTechnologiesFeedback.ID))
+                    if (!CompanyAndOrganizationFeedbackExists(companyAndOrganizationFeedback.ID))
                     {
                         return NotFound();
                     }
@@ -151,12 +148,12 @@ namespace mvc.Controllers
                         throw;
                     }
                 }
-                return Redirect("/Home/Technologies#feedback-wrapper");
+                return Redirect("/Home/Organizations#feedback-wrapper");
             }
-            return View(emergingTechnologiesFeedback);
+            return View(companyAndOrganizationFeedback);
         }
 
-        // GET: EmergingTechnologiesFeedbacks/Delete/5
+        // GET: CompanyFeedbacks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (!UserManager.GetUserName(User).Equals("manager@example.com"))
@@ -164,24 +161,22 @@ namespace mvc.Controllers
             {
                 return new ChallengeResult();
             }
-
             if (id == null)
             {
                 return NotFound();
             }
 
-            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks
+            var companyAndOrganizationFeedback = await Context.companyFeedbacks
                 .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (emergingTechnologiesFeedback == null)
+            if (companyAndOrganizationFeedback == null)
             {
                 return NotFound();
             }
 
-            return View(emergingTechnologiesFeedback);
+            return View(companyAndOrganizationFeedback);
         }
 
-        // POST: EmergingTechnologiesFeedbacks/Delete/5
+        // POST: CompanyFeedbacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -191,19 +186,15 @@ namespace mvc.Controllers
             {
                 return new ChallengeResult();
             }
-
-            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
-
-            Context.emergingTechnologiesFeedbacks.Remove(emergingTechnologiesFeedback);
+            var companyAndOrganizationFeedback = await Context.companyFeedbacks.FindAsync(id);
+            Context.companyFeedbacks.Remove(companyAndOrganizationFeedback);
             await Context.SaveChangesAsync();
-            return Redirect("/Home/Technologies#feedback-wrapper");
+            return Redirect("/Home/Organizations#feedback-wrapper");
         }
 
-        private bool EmergingTechnologiesFeedbackExists(int id)
+        private bool CompanyAndOrganizationFeedbackExists(int id)
         {
-            return Context.emergingTechnologiesFeedbacks.Any(e => e.ID == id);
+            return Context.companyFeedbacks.Any(e => e.ID == id);
         }
-
-
     }
 }

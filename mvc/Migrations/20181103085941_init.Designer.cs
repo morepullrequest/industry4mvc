@@ -10,7 +10,7 @@ using mvc.Data;
 namespace mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181103025745_init")]
+    [Migration("20181103085941_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,6 +184,38 @@ namespace mvc.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("mvc.Models.CompanyAndOrganizationFeedback", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Agree");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("Disagree");
+
+                    b.Property<string>("Feedback")
+                        .IsRequired();
+
+                    b.Property<string>("Heading")
+                        .IsRequired();
+
+                    b.Property<string>("OwnerID");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("Username");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("companyFeedbacks");
                 });
 
             modelBuilder.Entity("mvc.Models.EmergingTechnologiesFeedback", b =>

@@ -92,7 +92,7 @@
                         <button class="btn btn-success"><a href="/EmergingTechnologiesFeedbacks/Agree/@item.ID" class="text-white">Agree (@item.Agree)</a></button>
                         <button class="btn btn-danger"><a href="/EmergingTechnologiesFeedbacks/Disagree/@item.ID" class="text-white">Disagree (@item.Disagree)</a></button>
                     </div>
-                    @if (UserManager.GetUserName(User).Equals("manager@example.com"))
+                    @if (SignInManager.IsSignedIn(User) && UserManager.GetUserName(User).Equals("manager@example.com"))
                     {
 
                         <div>

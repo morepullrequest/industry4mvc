@@ -48,6 +48,27 @@ namespace mvc.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "companyFeedbacks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
+                    Heading = table.Column<string>(nullable: false),
+                    Rating = table.Column<int>(nullable: false),
+                    Feedback = table.Column<string>(nullable: false),
+                    Agree = table.Column<int>(nullable: false),
+                    Disagree = table.Column<int>(nullable: false),
+                    CompanyName = table.Column<string>(nullable: false),
+                    OwnerID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_companyFeedbacks", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "emergingTechnologiesFeedbacks",
                 columns: table => new
                 {
@@ -230,6 +251,9 @@ namespace mvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "companyFeedbacks");
 
             migrationBuilder.DropTable(
                 name: "emergingTechnologiesFeedbacks");
