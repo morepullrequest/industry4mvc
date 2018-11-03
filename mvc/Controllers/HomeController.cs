@@ -35,8 +35,10 @@ namespace mvc.Controllers
 
         public async Task<IActionResult> Technologies()
         {
+            IQueryable<EmergingTechnologiesFeedback> feedbacks = from f in Context.emergingTechnologiesFeedbacks
+                                                                 select f;
 
-            return View(await Context.emergingTechnologiesFeedbacks.ToListAsync());
+            return View(await feedbacks.OrderByDescending(f => f.Date).ToListAsync());
         }
 
         public IActionResult Organizations()

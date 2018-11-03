@@ -10,8 +10,8 @@ using mvc.Data;
 namespace mvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181102053516_feedbk")]
-    partial class feedbk
+    [Migration("20181103004034_date_name_1")]
+    partial class date_name_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -194,6 +194,8 @@ namespace mvc.Data.Migrations
 
                     b.Property<int>("Agree");
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<int>("Disagree");
 
                     b.Property<string>("EmergingTechnologiesName");
@@ -205,8 +207,6 @@ namespace mvc.Data.Migrations
                     b.Property<string>("OwnerID");
 
                     b.Property<int>("Rating");
-
-                    b.Property<DateTime>("Date");
 
                     b.Property<string>("Username");
 

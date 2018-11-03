@@ -192,6 +192,8 @@ namespace mvc.Data.Migrations
 
                     b.Property<int>("Agree");
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<int>("Disagree");
 
                     b.Property<string>("EmergingTechnologiesName");
@@ -203,8 +205,6 @@ namespace mvc.Data.Migrations
                     b.Property<string>("OwnerID");
 
                     b.Property<int>("Rating");
-
-                    b.Property<DateTime>("ReleaseDate");
 
                     b.Property<string>("Username");
 

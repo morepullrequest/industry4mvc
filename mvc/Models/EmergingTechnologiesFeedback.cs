@@ -12,7 +12,7 @@ namespace mvc.Models
         public int ID { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public String Username { get; set; }
 

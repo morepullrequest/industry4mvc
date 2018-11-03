@@ -63,7 +63,7 @@ namespace mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,ReleaseDate,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Create([Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
         {
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace mvc.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,ReleaseDate,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Date,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
         {
             var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Update);
 
