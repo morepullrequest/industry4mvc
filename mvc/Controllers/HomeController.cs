@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
@@ -11,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public HomeController(
+            ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
         {
-            _context = context;
-            _userManager = userManager;
+
         }
 
         public IActionResult Index()
@@ -35,7 +36,7 @@ namespace mvc.Controllers
         public async Task<IActionResult> Technologies()
         {
 
-            return View(await _context.emergingTechnologiesFeedbacks.ToListAsync());
+            return View(await Context.emergingTechnologiesFeedbacks.ToListAsync());
         }
 
         public IActionResult Organizations()

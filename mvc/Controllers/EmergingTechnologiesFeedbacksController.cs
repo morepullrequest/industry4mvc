@@ -1,31 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using mvc.Data;
 using mvc.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace mvc.Controllers
 {
-    public class EmergingTechnologiesFeedbacksController : Controller
+    [Authorize]
+    public class EmergingTechnologiesFeedbacksController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-
-        public EmergingTechnologiesFeedbacksController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public EmergingTechnologiesFeedbacksController(
+            ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager)
+            : base(context, authorizationService, userManager)
         {
-            _context = context;
-            _userManager = userManager;
+
         }
 
         // GET: EmergingTechnologiesFeedbacks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.emergingTechnologiesFeedbacks.ToListAsync());
+            return View(await Context.emergingTechnologiesFeedbacks.ToListAsync());
         }
 
         // GET: EmergingTechnologiesFeedbacks/Details/5
@@ -36,7 +39,7 @@ namespace mvc.Controllers
                 return NotFound();
             }
 
-            var emergingTechnologiesFeedback = await _context.emergingTechnologiesFeedbacks
+            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (emergingTechnologiesFeedback == null)
             {
@@ -50,8 +53,8 @@ namespace mvc.Controllers
         public IActionResult Create()
         {
             EmergingTechnologiesFeedback emergingTechnologiesFeedback = new EmergingTechnologiesFeedback();
-            emergingTechnologiesFeedback.Username = _userManager.GetUserName(User);
-            emergingTechnologiesFeedback.OwnerID = _userManager.GetUserId(User);
+            emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
+            emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
             return View(emergingTechnologiesFeedback);
         }
 
@@ -64,10 +67,10 @@ namespace mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                emergingTechnologiesFeedback.Username = _userManager.GetUserName(User);
-                emergingTechnologiesFeedback.OwnerID = _userManager.GetUserId(User);
-                _context.Add(emergingTechnologiesFeedback);
-                await _context.SaveChangesAsync();
+                emergingTechnologiesFeedback.Username = UserManager.GetUserName(User);
+                emergingTechnologiesFeedback.OwnerID = UserManager.GetUserId(User);
+                Context.Add(emergingTechnologiesFeedback);
+                await Context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(emergingTechnologiesFeedback);
@@ -76,12 +79,23 @@ namespace mvc.Controllers
         // GET: EmergingTechnologiesFeedbacks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var emergingTechnologiesFeedback = await _context.emergingTechnologiesFeedbacks.FindAsync(id);
+            var isAuth = await AuthorizationService.AuthorizeAsync(User, id, FeedbackOperations.Update);
+
+            if (!isAuth.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
+            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
+
+
+
             if (emergingTechnologiesFeedback == null)
             {
                 return NotFound();
@@ -96,6 +110,13 @@ namespace mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,ReleaseDate,Username,Heading,Rating,Feedback,Agree,Disagree,EmergingTechnologiesName,OwnerID")] EmergingTechnologiesFeedback emergingTechnologiesFeedback)
         {
+            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Update);
+
+            if (!isAuth.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
             if (id != emergingTechnologiesFeedback.ID)
             {
                 return NotFound();
@@ -105,8 +126,8 @@ namespace mvc.Controllers
             {
                 try
                 {
-                    _context.Update(emergingTechnologiesFeedback);
-                    await _context.SaveChangesAsync();
+                    Context.Update(emergingTechnologiesFeedback);
+                    await Context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,13 +148,24 @@ namespace mvc.Controllers
         // GET: EmergingTechnologiesFeedbacks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var emergingTechnologiesFeedback = await _context.emergingTechnologiesFeedbacks
+
+
+            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks
                 .FirstOrDefaultAsync(m => m.ID == id);
+
+            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Delete);
+
+            if (!isAuth.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
             if (emergingTechnologiesFeedback == null)
             {
                 return NotFound();
@@ -147,15 +179,26 @@ namespace mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var emergingTechnologiesFeedback = await _context.emergingTechnologiesFeedbacks.FindAsync(id);
-            _context.emergingTechnologiesFeedbacks.Remove(emergingTechnologiesFeedback);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            var emergingTechnologiesFeedback = await Context.emergingTechnologiesFeedbacks.FindAsync(id);
+
+            var isAuth = await AuthorizationService.AuthorizeAsync(User, emergingTechnologiesFeedback, FeedbackOperations.Delete);
+
+            if (!isAuth.Succeeded)
+            {
+                return new ChallengeResult();
+            }
+
+            Context.emergingTechnologiesFeedbacks.Remove(emergingTechnologiesFeedback);
+            await Context.SaveChangesAsync();
+            return Redirect("/Home/Technologies");
         }
 
         private bool EmergingTechnologiesFeedbackExists(int id)
         {
-            return _context.emergingTechnologiesFeedbacks.Any(e => e.ID == id);
+            return Context.emergingTechnologiesFeedbacks.Any(e => e.ID == id);
         }
+
+
     }
 }
